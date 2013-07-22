@@ -15,4 +15,7 @@ PumpMigrate works with:
 - Python (tested with 2.7)
 - requests-oauthlib 0.3.0+
 - requests 1.2.0+
-- PyPump https://github.com/xray7224/PyPump/
+- PyPump https://github.com/xray7224/PyPump/ (PyPump is also available on pypi but currently not up to date)
+    pumpmigrate looks for pypump in its own directory,
+    i am personally using a pypump -> path/to/PyPump/pypump symlink,
+    i'm open to suggestions on how to solve this better.
