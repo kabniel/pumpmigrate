@@ -1,0 +1,18 @@
+===========
+PumpMigrate - Transfer contacts between your Pump.io accounts
+===========
+
+Run with ./pumpmigrate.py
+
+Account credentials are stored in ~/.config/pumpmigrate/config.json
+'Following' backups are stored in ~/.cache/pumpmigrate/
+
+Dependencies
+===========
+
+PumpMigrate works with:
+
+- Python (tested with 2.7)
+- requests-oauthlib 0.3.0+
+- requests 1.2.0+
+- PyPump https://github.com/xray7224/PyPump/
