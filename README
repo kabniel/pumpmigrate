@@ -1,11 +1,16 @@
 ===========
 PumpMigrate - Transfer contacts between your Pump.io accounts
 ===========
+https://gitorious.org/pumpmigrate
 
+
+Usage
+=====
 Run with ./pumpmigrate.py
 
 Account credentials are stored in ~/.config/pumpmigrate/config.json
 'Following' backups are stored in ~/.cache/pumpmigrate/
+
 
 Dependencies
 ===========
