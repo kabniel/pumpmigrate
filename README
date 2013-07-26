@@ -1,13 +1,27 @@
 ===========
 PumpMigrate - Transfer contacts between your Pump.io accounts
 ===========
-https://gitorious.org/pumpmigrate
+Author:		Jonas (kabniel) Haraldsson
+Project page:	https://gitorious.org/pumpmigrate
+Git repo:	https://git.gitorious.org/pumpmigrate/pumpmigrate.git
+
+
+What does it do?
+================
+1. Authorize itself with your old and new account.
+2. Use your new account to follow all contacts from your old account.
+3. Use your old account to unfollow all contacts that both accounts are following.
+
+You can quit at any time.
 
 
 Usage
 =====
 Run with ./pumpmigrate.py
 
+
+Files
+=====
 Account credentials are stored in ~/.config/pumpmigrate/config.json
 'Following' backups are stored in ~/.cache/pumpmigrate/
 
@@ -18,9 +32,6 @@ Dependencies
 PumpMigrate works with:
 
 - Python (tested with 2.7)
+- PyPump 0.1.5a+
 - requests-oauthlib 0.3.0+
 - requests 1.2.0+
-- PyPump https://github.com/xray7224/PyPump/ (PyPump is also available on pypi but currently not up to date)
-    pumpmigrate looks for pypump in its own directory,
-    i am personally using a pypump -> path/to/PyPump/pypump symlink,
-    i'm open to suggestions on how to solve this better.
