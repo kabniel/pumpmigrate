@@ -8,11 +8,9 @@ Git repo:	https://git.gitorious.org/pumpmigrate/pumpmigrate.git
 
 What does it do?
 ================
-1. Authorize itself with your old and new account.
-2. Use your new account to follow all contacts from your old account.
-3. Use your old account to unfollow all contacts that both accounts are following.
-
-You can quit at any time.
+1. Ask you to enter the webfinger (user@example.com) for your old and new accounts (If the account is not already stored in config, it will also ask you to authorize pumpmigrate with the account)
+3. Prompts if you want to follow contacts from your old account with the new account.
+4. Prompts if you want to unfollow contacts shared by both accounts with the old account.
 
 
 Usage
@@ -23,7 +21,7 @@ Run with ./pumpmigrate.py
 Files
 =====
 Account credentials are stored in ~/.config/pumpmigrate/config.json
-'Following' backups are stored in ~/.cache/pumpmigrate/
+Backup of contacts are stored in ~/.cache/pumpmigrate/<webfinger>_followings_<timestamp>.json
 
 
 Dependencies
