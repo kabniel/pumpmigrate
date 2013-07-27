@@ -22,7 +22,6 @@ from parser import Parser
 
 class Client():
     name = 'pumpmigrate'
-    args = None
 
     def __init__(self):
         self.cfgFile = os.path.join(os.environ['HOME'],'.config', self.name,'accounts.json')
