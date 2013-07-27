@@ -67,6 +67,29 @@ class Account():
         except:
             return False
 
+    def followMany(self, contacts):
+        for contact in contacts:
+            # we dont want to follow ourselves
+            if contact == self.webfinger:
+                print(" Skipped: %s (your account)" % contact)
+            # skip people we are already following
+            elif contact in self.following:
+                print(" Skipped: %s (already following)" % contact)
+            elif self.follow(contact):
+                print(" Followed: %s" % contact)
+            else:
+                print(" Failed: %s" % contact)
+
+    def unfollowMany(self, contacts):
+        for contact in contacts:
+            # skip contacts we are not following
+            if contact not in self.following:
+                print(" Skipped %s (not following)" % contact)
+            elif self.unfollow(contact):
+                print(" Unfollowed: %s" % contact)
+            else:
+                print(" Failed: %s" % contact)
+
 class Client():
     def __init__(self):
         self.client_name = 'pumpmigrate'
@@ -139,28 +162,6 @@ class Client():
                                                   len(self.accounts[alias].following),
                                                   alias))
 
-    def followMany(self, acct, contacts):
-        for contact in contacts:
-            # we dont want to follow ourselves
-            if contact == acct.webfinger:
-                print(" Skipped: %s (your account)" % contact)
-            # skip people we are already following
-            elif contact in acct.following:
-                print(" Skipped: %s (already following)" % contact)
-            elif acct.follow(contact):
-                print(" Followed: %s" % contact)
-            else:
-                print(" Failed: %s" % contact)
-
-    def unfollowMany(self, acct, contacts):
-        for contact in contacts:
-            # skip contacts we are not following
-            if contact not in acct.following:
-                print(" Skipped %s (not following)" % contact)
-            elif acct.unfollow(contact):
-                print(" Unfollowed: %s" % contact)
-            else:
-                print(" Failed: %s" % contact)
 
     def promptEnter(self, msg):
         print(msg)
@@ -175,14 +176,14 @@ class Client():
 
         # follow contacts from old account
         self.promptEnter("%s will now follow %s new contacts" % (new.webfinger, len(old.following)))
-        self.followMany(new, old.following)
+        new.followMany(old.following)
         new.getFollowing()
         print("%s is now following %s contacts\n----" % (new.webfinger, len(new.following)))
 
         # unfollow contacts followed by both old and new
         oldandnew = [x for x in old.following if x in new.following]
         self.promptEnter("%s will now unfollow %s contacts" % (old.webfinger, len(oldandnew)))
-        self.unfollowMany(old, oldandnew)
+        old.unfollowMany(oldandnew)
         old.getFollowing()
         print("%s is now following %s contacts\n----" % (old.webfinger, len(old.following)))
 
