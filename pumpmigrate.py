@@ -18,9 +18,11 @@
 import json, sys, os
 from datetime import datetime
 from account import Account
+from parser import Parser
 
 class Client():
     name = 'pumpmigrate'
+    args = None
 
     def __init__(self):
         self.cfgFile = os.path.join(os.environ['HOME'],'.config', self.name,'accounts.json')
@@ -29,6 +31,8 @@ class Client():
         self.cfg = {}
         self.accounts = {}
         self.loadCfg()
+
+        Parser(self)
 
     def writeCfg(self):
         if not os.path.exists(os.path.dirname(self.cfgFile)):
@@ -55,9 +59,9 @@ class Client():
             f.write(json.dumps(acct.following))
             f.close()
 
-    def migrate(self):
+    def migrate(self, *args, **kwargs):
         aliases = ['old', 'new']
-        webfingers = [None, None] # to be loaded from args
+        webfingers = self.webfingers or [None, None]
         for alias, webfinger in zip(aliases, webfingers):
             self.accounts[alias] = Account(webfinger, alias=alias, client=self)
         old = self.accounts['old']
@@ -65,9 +69,21 @@ class Client():
         # follow contacts from old account
         new.followMany(old.following)
         # unfollow contacts if they are in both old and new
-        oldandnew = [x for x in old.following if x in new.following]
-        old.unfollowMany(oldandnew)
+        if not self.nounfollow:
+            inboth = set(old.following) & set(new.following)
+            old.unfollowMany(inboth)
+
+    def sync(self, *args, **kwargs):
+        aliases = ['first', 'second']
+        webfingers = self.webfingers or [None, None]
+        for alias, webfinger in zip(aliases, webfingers):
+            self.accounts[alias] = Account(webfinger, alias=alias, client=self)
+        first = self.accounts['first']
+        second = self.accounts['second']
+        andor = set(first.following) | set(second.following)
+        first.followMany(andor)
+        second.followMany(andor)
+
 
 if __name__ == '__main__':
     app = Client()
-    app.migrate()

@@ -69,6 +69,7 @@ class Account(object):
         self._client.backupFollowing(self)
 
     def getFollowing(self):
+        print("Loading contacts for %s (this may take a while)" % self.webfinger)
         self.following = []
         url = 'https://%s/api/user/%s/following' % (self.pump.server, self.pump.nickname)
         auth = OAuth1(self.key, self.secret, self.token, self.token_secret)
@@ -84,6 +85,8 @@ class Account(object):
                 break
 
     def follow(self, webfinger):
+        if self._client.dryrun:
+            return True
         try:
             # 'pypump=self.pump' is needed for now,
             # see https://github.com/xray7224/PyPump/issues/37
@@ -92,6 +95,8 @@ class Account(object):
             return False
 
     def unfollow(self, webfinger):
+        if self._client.dryrun:
+            return True
         try:
             return self.pump.Person(webfinger, pypump=self.pump).unfollow()
         except:
