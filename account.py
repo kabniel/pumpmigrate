@@ -14,8 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import json, sys, os
-from datetime import datetime
+import json, sys
 import requests
 from pypump import PyPump
 from requests_oauthlib import OAuth1

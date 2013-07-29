@@ -15,7 +15,7 @@
 ##
 
 
-import json, sys, os
+import json, os
 from datetime import datetime
 from account import Account
 from parser import Parser
