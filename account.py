@@ -46,14 +46,18 @@ class Account(object):
 
         self.getFollowing()
         self.backupFollowing()
-        print('%s (following %s) loaded as %s account\n----' % (self.webfinger, len(self.following), alias))
+        self._client.say('%s (following %s) loaded as %s account\n----' % (self.webfinger, len(self.following), alias))
 
     def promptEnter(self, msg):
-        print(msg)
-        try:
-            raw_input("Hit enter to continue or ctrl+c to quit")
-        except KeyboardInterrupt:
-            sys.exit()
+        if self._client.parser.args.quiet and self._client.parser.args.noprompt:
+            pass
+        else:
+            print(msg)
+            if not self._client.parser.args.noprompt:
+                try:
+                    raw_input("Hit enter to continue or ctrl+c to quit")
+                except KeyboardInterrupt:
+                    sys.exit()
 
     def writeCfg(self):
         self._client.cfg[self.webfinger] = {
@@ -68,7 +72,7 @@ class Account(object):
         self._client.backupFollowing(self)
 
     def getFollowing(self):
-        print("Loading contacts for %s (this may take a while)" % self.webfinger)
+        self._client.say("Loading contacts for %s (this may take a while)" % self.webfinger)
         self.following = []
         url = 'https://%s/api/user/%s/following' % (self.pump.server, self.pump.nickname)
         auth = OAuth1(self.key, self.secret, self.token, self.token_secret)
@@ -84,7 +88,7 @@ class Account(object):
                 break
 
     def follow(self, webfinger):
-        if self._client.dryrun:
+        if self._client.parser.args.dryrun:
             return True
         try:
             # 'pypump=self.pump' is needed for now,
@@ -94,7 +98,7 @@ class Account(object):
             return False
 
     def unfollow(self, webfinger):
-        if self._client.dryrun:
+        if self._client.parser.args.dryrun:
             return True
         try:
             return self.pump.Person(webfinger, pypump=self.pump).unfollow()
@@ -107,17 +111,17 @@ class Account(object):
         for contact in contacts:
             # we dont want to follow ourselves
             if contact == self.webfinger:
-                print(" Skipped: %s (your account)" % contact)
+                self._client.say(" Skipped: %s (your account)" % contact)
             # skip people we are already following
             elif contact in self.following:
-                print(" Skipped: %s (already following)" % contact)
+                self._client.say(" Skipped: %s (already following)" % contact)
             elif self.follow(contact):
-                print(" Followed: %s" % contact)
+                self._client.say(" Followed: %s" % contact)
             else:
-                print(" Failed: %s" % contact)
+                self._client.say(" Failed: %s" % contact)
 
         self.getFollowing()
-        print("%s is now following %s contacts\n----" % (self.webfinger, len(self.following)))
+        self._client.say("%s is now following %s contacts\n----" % (self.webfinger, len(self.following)))
 
     def unfollowMany(self, contacts):
         self.promptEnter("%s will now unfollow %s contacts" % (self.webfinger, len(contacts)))
@@ -125,11 +129,11 @@ class Account(object):
         for contact in contacts:
             # skip contacts we are not following
             if contact not in self.following:
-                print(" Skipped %s (not following)" % contact)
+                self._client.say(" Skipped %s (not following)" % contact)
             elif self.unfollow(contact):
-                print(" Unfollowed: %s" % contact)
+                self._client.say(" Unfollowed: %s" % contact)
             else:
-                print(" Failed: %s" % contact)
+                self._client.say(" Failed: %s" % contact)
 
         self.getFollowing()
-        print("%s is now following %s contacts\n----" % (self.webfinger, len(self.following)))
+        self._client.say("%s is now following %s contacts\n----" % (self.webfinger, len(self.following)))

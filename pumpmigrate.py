@@ -31,7 +31,11 @@ class Client():
         self.accounts = {}
         self.loadCfg()
 
-        Parser(self)
+        self.parser = Parser(self)
+
+    def say(self, msg):
+        if not self.parser.args.quiet:
+            print(msg)
 
     def writeCfg(self):
         if not os.path.exists(os.path.dirname(self.cfgFile)):
@@ -58,23 +62,25 @@ class Client():
             f.write(json.dumps(acct.following))
             f.close()
 
-    def migrate(self, *args, **kwargs):
+    def move(self, *args, **kwargs):
         aliases = ['old', 'new']
-        webfingers = self.webfingers or [None, None]
+        webfingers = self.parser.args.webfingers or [None, None]
         for alias, webfinger in zip(aliases, webfingers):
             self.accounts[alias] = Account(webfinger, alias=alias, client=self)
         old = self.accounts['old']
         new = self.accounts['new']
         # follow contacts from old account
-        new.followMany(old.following)
+        if not self.parser.args.nofollow:
+            new.followMany(old.following)
+
         # unfollow contacts if they are in both old and new
-        if not self.nounfollow:
+        if not self.parser.args.nounfollow:
             inboth = set(old.following) & set(new.following)
             old.unfollowMany(inboth)
 
     def sync(self, *args, **kwargs):
         aliases = ['first', 'second']
-        webfingers = self.webfingers or [None, None]
+        webfingers = self.parser.args.webfingers or [None, None]
         for alias, webfinger in zip(aliases, webfingers):
             self.accounts[alias] = Account(webfinger, alias=alias, client=self)
         first = self.accounts['first']
@@ -83,6 +89,9 @@ class Client():
         first.followMany(andor)
         second.followMany(andor)
 
+    def run(self):
+        self.parser.args.func(self.parser.args)
 
 if __name__ == '__main__':
     app = Client()
+    app.run()
