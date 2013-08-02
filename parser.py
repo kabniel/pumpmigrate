@@ -4,6 +4,7 @@ import sys, argparse
 class Parser():
     def __init__(self, obj):
         self.parser = argparse.ArgumentParser()
+        self.parser.add_argument('-v', '--version', action='version', version='%s %s' % (obj.name, obj.version))
         subparsers = self.parser.add_subparsers(dest='subcommand', title='Actions',
                                                 description="(if none is specified, 'move' will be run in interactive mode)")
 
