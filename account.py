@@ -42,13 +42,13 @@ class Account(object):
         self.pump = PyPump(self.webfinger, client_name=self._client.name, **self.cfg)
         self.key, self.secret, self.expiry = self.pump.get_registration()
         self.token, self.token_secret = self.pump.get_token()
-        self.writeCfg()
+        self.write_config()
 
-        self.getFollowing()
-        self.backupFollowing()
+        self.get_following()
+        self.backup_following()
         self._client.say('%s (following %s) loaded as %s account\n----' % (self.webfinger, len(self.following), alias))
 
-    def promptEnter(self, msg):
+    def prompt_enter(self, msg):
         if self._client.parser.args.quiet and self._client.parser.args.noprompt:
             pass
         else:
@@ -59,19 +59,19 @@ class Account(object):
                 except KeyboardInterrupt:
                     sys.exit()
 
-    def writeCfg(self):
+    def write_config(self):
         self._client.cfg[self.webfinger] = {
             'key':self.key,
             'secret':self.secret,
             'token':self.token,
             'token_secret':self.token_secret
         }
-        self._client.writeCfg()
+        self._client.write_config()
 
-    def backupFollowing(self):
-        self._client.backupFollowing(self)
+    def backup_following(self):
+        self._client.backup_following(self)
 
-    def getFollowing(self):
+    def get_following(self):
         self._client.say("Loading contacts for %s (this may take a while)" % self.webfinger)
         self.following = []
         url = 'https://%s/api/user/%s/following' % (self.pump.server, self.pump.nickname)
@@ -105,8 +105,8 @@ class Account(object):
         except:
             return False
 
-    def followMany(self, contacts):
-        self.promptEnter("%s will now follow %s new contacts" % (self.webfinger, len(contacts)))
+    def follow_many(self, contacts):
+        self.prompt_enter("%s will now follow %s new contacts" % (self.webfinger, len(contacts)))
 
         for contact in contacts:
             # we dont want to follow ourselves
@@ -120,11 +120,11 @@ class Account(object):
             else:
                 self._client.say(" Failed: %s" % contact)
 
-        self.getFollowing()
+        self.get_following()
         self._client.say("%s is now following %s contacts\n----" % (self.webfinger, len(self.following)))
 
-    def unfollowMany(self, contacts):
-        self.promptEnter("%s will now unfollow %s contacts" % (self.webfinger, len(contacts)))
+    def unfollow_many(self, contacts):
+        self.prompt_enter("%s will now unfollow %s contacts" % (self.webfinger, len(contacts)))
 
         for contact in contacts:
             # skip contacts we are not following
@@ -135,5 +135,5 @@ class Account(object):
             else:
                 self._client.say(" Failed: %s" % contact)
 
-        self.getFollowing()
+        self.get_following()
         self._client.say("%s is now following %s contacts\n----" % (self.webfinger, len(self.following)))

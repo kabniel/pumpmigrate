@@ -30,7 +30,7 @@ class Client():
 
         self.cfg = {}
         self.accounts = {}
-        self.loadCfg()
+        self.load_config()
 
         self.parser = Parser(self)
 
@@ -38,14 +38,14 @@ class Client():
         if not self.parser.args.quiet:
             print(msg)
 
-    def writeCfg(self):
+    def write_config(self):
         if not os.path.exists(os.path.dirname(self.cfgFile)):
             os.makedirs(os.path.dirname(self.cfgFile))
         with open(self.cfgFile, 'w') as f:
             f.write(json.dumps(self.cfg))
             f.close()
     
-    def loadCfg(self):
+    def load_config(self):
         try:
             with open(self.cfgFile, 'r') as f:
                 self.cfg = json.loads(f.read())
@@ -54,7 +54,7 @@ class Client():
             return False
         return True
 
-    def backupFollowing(self, acct):
+    def backup_following(self, acct):
         tstamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         backupFile = os.path.join(self.cacheDir, "%s_following_%s.json" % (acct.webfinger, tstamp))
         if not os.path.exists(os.path.dirname(backupFile)):
@@ -72,12 +72,12 @@ class Client():
         new = self.accounts['new']
         # follow contacts from old account
         if not self.parser.args.nofollow:
-            new.followMany(old.following)
+            new.follow_many(old.following)
 
         # unfollow contacts if they are in both old and new
         if not self.parser.args.nounfollow:
             inboth = set(old.following) & set(new.following)
-            old.unfollowMany(inboth)
+            old.unfollow_many(inboth)
 
     def sync(self, *args, **kwargs):
         aliases = ['first', 'second']
@@ -87,8 +87,8 @@ class Client():
         first = self.accounts['first']
         second = self.accounts['second']
         andor = set(first.following) | set(second.following)
-        first.followMany(andor)
-        second.followMany(andor)
+        first.follow_many(andor)
+        second.follow_many(andor)
 
     def run(self):
         self.parser.args.func(self.parser.args)
