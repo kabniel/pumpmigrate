@@ -1,0 +1,1 @@
+pumpmigrate on Python 2 doesnt work with pump.jpope.org, as Python 2 requests does not support TLS SNI ( https://github.com/kennethreitz/requests/issues/749 )
