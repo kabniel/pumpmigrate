@@ -46,7 +46,7 @@ class Account(object):
 
         self.get_following()
         self.backup_following()
-        self._client.say('%s (following %s) loaded as %s account\n----' % (self.webfinger, len(self.following), alias))
+        self._client.say('%s: account ready (following %s contacts)\n----' % (self.webfinger, len(self.following)))
 
     def prompt_enter(self, msg):
         if self._client.parser.args.quiet and self._client.parser.args.noprompt:
@@ -72,7 +72,7 @@ class Account(object):
         self._client.backup_following(self)
 
     def get_following(self):
-        self._client.say("Loading contacts for %s (this may take a while)" % self.webfinger)
+        self._client.say("%s: getting contacts (this may take a while)" % self.webfinger)
         self.following = []
         url = 'https://%s/api/user/%s/following' % (self.pump.server, self.pump.nickname)
         auth = OAuth1(self.key, self.secret, self.token, self.token_secret)
@@ -106,7 +106,7 @@ class Account(object):
             return False
 
     def follow_many(self, contacts):
-        self.prompt_enter("%s will now follow %s new contacts" % (self.webfinger, len(contacts)))
+        self.prompt_enter("%s: will now follow %s new contacts" % (self.webfinger, len(contacts)))
 
         for contact in contacts:
             # we dont want to follow ourselves
@@ -121,10 +121,10 @@ class Account(object):
                 self._client.say(" Failed: %s" % contact)
 
         self.get_following()
-        self._client.say("%s is now following %s contacts\n----" % (self.webfinger, len(self.following)))
+        self._client.say("%s: now following %s contacts\n----" % (self.webfinger, len(self.following)))
 
     def unfollow_many(self, contacts):
-        self.prompt_enter("%s will now unfollow %s contacts" % (self.webfinger, len(contacts)))
+        self.prompt_enter("%s: will now unfollow %s contacts" % (self.webfinger, len(contacts)))
 
         for contact in contacts:
             # skip contacts we are not following
@@ -136,4 +136,4 @@ class Account(object):
                 self._client.say(" Failed: %s" % contact)
 
         self.get_following()
-        self._client.say("%s is now following %s contacts\n----" % (self.webfinger, len(self.following)))
+        self._client.say("%s: now following %s contacts\n----" % (self.webfinger, len(self.following)))
