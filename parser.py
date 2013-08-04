@@ -17,28 +17,28 @@ class Parser():
         moveDesc = dedent('''\
                           Move contacts between accounts.
 
-                          Example 1:
+                          example 1:
                             user@pump1 is following foo and user@pump2 is following bar.
                               pumpmigrate.py move -a user@pump1 user@pump2
                             user@pump1 is not following anyone, and user@pump2 is following foo and bar.
 
-                          Example 2:
+                          example 2:
                             user@pump1 is following foo and user@pump2 is following bar.
                               pumpmigrate.py move -a user@pump1 user@pump2 --no-unfollow
                             user@pump1 is still following foo, and user@pump2 is following foo and bar.
                           ''')
 
-        move = subparsers.add_parser('move', help='Move contacts between accounts.',
+        move = subparsers.add_parser('move', help='Move contacts between accounts',
                                      formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description=moveDesc)
         move.add_argument('-a', '--accounts', nargs=2, metavar='webfinger', dest='webfingers',
-                          help='The accounts to move contacts between.')
+                          help='The accounts to move contacts between')
         move.add_argument('--quiet', action='store_true', dest='quiet',
-                          help='Do not print any output.')
+                          help='Do not print any output')
         move.add_argument('--no-follow', action='store_true', dest='nofollow',
-                          help='Do not follow any contacts.')
+                          help='Do not follow any contacts')
         move.add_argument('--no-unfollow', action='store_true', dest='nounfollow',
-                          help='Do not unfollow any contacts.')
+                          help='Do not unfollow any contacts')
         move.add_argument('--continue', action='store_true', dest='noprompt',
                           help='Do not prompt before actions, just continue')
         move.add_argument('--dry-run', action='store_true', dest='dryrun',
@@ -48,17 +48,17 @@ class Parser():
         syncDesc = dedent('''\
                           Sync contacts between accounts.
 
-                          Example usage:
+                          example:
                             user@pump1 is following foo and user@pump2 is following bar.
                               pumpmigrate.py sync -a user@pump1 user@pump2
                             user@pump1 and user@pump2 are now both following foo and bar.''')
-        sync = subparsers.add_parser('sync', help='Sync contacts between accounts.',
+        sync = subparsers.add_parser('sync', help='Sync contacts between accounts',
                                      formatter_class=argparse.RawDescriptionHelpFormatter,
                                      description=syncDesc)
         sync.add_argument('-a', '--accounts', nargs=2, metavar='webfinger', dest='webfingers',
-                          help='The accounts to sync contacts between.')
+                          help='The accounts to sync contacts between')
         sync.add_argument('--quiet', action='store_true', dest='quiet',
-                          help='Do not print any output.')
+                          help='Do not print any output')
         sync.add_argument('--continue', action='store_true', dest='noprompt',
                           help='Do not prompt before actions, just continue')
         sync.add_argument('--dry-run', action='store_true',
