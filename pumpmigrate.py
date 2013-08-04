@@ -87,8 +87,8 @@ class Client():
         first = self.accounts['first']
         second = self.accounts['second']
         andor = set(first.following) | set(second.following)
-        first.follow_many(andor)
-        second.follow_many(andor)
+        first.follow_many(andor - set(first.following))
+        second.follow_many(andor - set(second.following))
 
     def run(self):
         self.parser.args.func(self.parser.args)
