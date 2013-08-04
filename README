@@ -1,35 +1,27 @@
-===========
-PumpMigrate - Transfer contacts between your Pump.io accounts
-===========
+# PumpMigrate - Transfer contacts between your Pump.io accounts #
+
 Author:		Jonas (kabniel) Haraldsson
-Project page:	https://gitorious.org/pumpmigrate
-Git repo:	https://git.gitorious.org/pumpmigrate/pumpmigrate.git
+Project page:	<https://gitorious.org/pumpmigrate>
+Git repo:	<https://git.gitorious.org/pumpmigrate/pumpmigrate.git>
 
 
-What does it do?
-================
-1. Ask you to enter the webfinger (user@example.com) for your old and new accounts (If the account is not already stored in config, it will also ask you to authorize pumpmigrate with the account)
-3. Prompts if you want to follow contacts from your old account with the new account.
-4. Prompts if you want to unfollow contacts shared by both accounts with the old account.
+## What does it do? ##
 
+Pumpmigrate lets you move, copy or sync contacts you follow between accounts.
 
-Usage
-=====
-Run with ./pumpmigrate.py
+## Usage ##
 
+Run `./pumpmigrate.py --help` for help.
 
-Files
-=====
-Account credentials are stored in ~/.config/pumpmigrate/config.json
+## Files ##
+
+Account credentials are stored in ~/.config/pumpmigrate/accounts.json
 Backup of contacts are stored in ~/.cache/pumpmigrate/<webfinger>_followings_<timestamp>.json
 
 
-Dependencies
-===========
+## Dependencies ##
 
-PumpMigrate works with:
-
-- Python (tested with 2.7)
-- PyPump 0.1.5a+
-- requests-oauthlib 0.3.0+
-- requests 1.2.0+
+* Python (tested with 2.7)
+* PyPump 0.1.5a+
+* requests-oauthlib 0.3.0+
+* requests 1.2.0+
