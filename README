@@ -44,8 +44,8 @@ user@pump1 and user@pump2 are now both following foo and bar.
 
 ## Files
 
-Account credentials are stored in ~/.config/pumpmigrate/accounts.json
-Backup of contacts are stored in ~/.cache/pumpmigrate/<webfinger>_followings_<timestamp>.json
+Account credentials are stored in `~/.config/pumpmigrate/accounts.json`
+Backup of contacts are stored in `~/.cache/pumpmigrate/<webfinger>_followings_<timestamp>.json`
 
 ## Dependencies
 
