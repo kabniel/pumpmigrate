@@ -1,32 +1,60 @@
-# PumpMigrate - Transfer contacts between your Pump.io accounts #
+# PumpMigrate
+
+Move, copy or sync contacts you follow between accounts.
 
 Author:		Jonas (kabniel) Haraldsson
 Project page:	<https://gitorious.org/pumpmigrate>
 Git repo:	<https://git.gitorious.org/pumpmigrate/pumpmigrate.git>
 
+## Usage
 
-## What does it do? ##
+PumpMigrate has two subcommands, `move` and `sync`
 
-Pumpmigrate lets you move, copy or sync contacts you follow between accounts.
+To move contacts between two accounts, run:
+	pumpmigrate.py move
 
-## Usage ##
+To sync contacts for two accounts, run:
+	pumpmigrate.py sync
 
-Run `./pumpmigrate.py --help` for help.
+When an account is first used with PumpMigrate,
+it will ask you for permission to use that account.
 
-## Files ##
+For more help, run:
+	pumpmigrate.py subcommand --help
+
+### Examples
+
+#### Move contacts
+
+user@pump1 is following foo and user@pump2 is following bar.
+	pumpmigrate.py move -a user@pump1 user@pump2
+user@pump1 is not following anyone, and user@pump2 is following foo and bar.
+
+#### Copy contacts
+
+user@pump1 is following foo and user@pump2 is following bar.
+	pumpmigrate.py move -a user@pump1 user@pump2 --no-unfollow
+user@pump1 is still following foo, and user@pump2 is following foo and bar.
+
+#### Sync contacts
+
+user@pump1 is following foo and user@pump2 is following bar.
+	pumpmigrate.py sync -a user@pump1 user@pump2
+user@pump1 and user@pump2 are now both following foo and bar.
+
+## Files
 
 Account credentials are stored in ~/.config/pumpmigrate/accounts.json
 Backup of contacts are stored in ~/.cache/pumpmigrate/<webfinger>_followings_<timestamp>.json
 
-
-## Dependencies ##
+## Dependencies
 
 * Python (tested with 2.7)
 * PyPump 0.1.5a+ <https://github.com/xray7224/PyPump>
 * requests-oauthlib 0.3.0+
 * requests 1.2.0+
 
+## Contact info
 
-## Contact info ##
-Account page on the pump.io network: <https://microca.st/kabniel>
+pump.io network profile: <https://microca.st/kabniel>
 I can also be found in #pump.io on irc.freenode.net
