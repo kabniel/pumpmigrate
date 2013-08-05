@@ -22,6 +22,11 @@ Backup of contacts are stored in ~/.cache/pumpmigrate/<webfinger>_followings_<ti
 ## Dependencies ##
 
 * Python (tested with 2.7)
-* PyPump 0.1.5a+
+* PyPump 0.1.5a+ <https://github.com/xray7224/PyPump>
 * requests-oauthlib 0.3.0+
 * requests 1.2.0+
+
+
+## Contact info ##
+Account page on the pump.io network: <https://microca.st/kabniel>
+I can also be found in #pump.io on irc.freenode.net
