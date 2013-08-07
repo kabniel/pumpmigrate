@@ -14,7 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import json, sys
+import sys
 import requests
 from pypump import PyPump
 from requests_oauthlib import OAuth1
@@ -79,7 +79,7 @@ class Account(object):
 
         while True:
             response = requests.get(url, auth=auth)
-            following = json.loads(response.content)
+            following = response.json()
             for item in following['items']:
                 self.following.append(item['id'].split(':')[1])
             if 'next' in following['links']:
