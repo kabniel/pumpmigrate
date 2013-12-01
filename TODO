@@ -6,4 +6,3 @@ README that doesnt suck
 Sync more than two accounts
 Subcommand 'auth' to authorize pumpmigrate with account, store credentials and exit
 Check for bad account IDs (strip newlines and spaces?)
-set protocol based on pypump data, currently defaults to https for getting following list, possible problem if pump server only support http

@@ -15,9 +15,7 @@
 ##
 
 import sys
-import requests
 from pypump import PyPump
-from requests_oauthlib import OAuth1
 
 class Account(object):
     _client = None
@@ -74,26 +72,16 @@ class Account(object):
     def get_following(self):
         self._client.say("%s: getting contacts (this may take a while)" % self.webfinger)
         self.following = []
-        url = 'https://%s/api/user/%s/following' % (self.pump.server, self.pump.nickname)
-        auth = OAuth1(self.key, self.secret, self.token, self.token_secret)
 
-        while True:
-            response = requests.get(url, auth=auth)
-            following = response.json()
-            for item in following['items']:
-                self.following.append(item['id'].split(':')[1])
-            if 'next' in following['links']:
-                url = following['links']['next']['href']
-            else:
-                break
+        for i in self.pump.me.following:
+            self.following.append(i.webfinger)
 
     def follow(self, webfinger):
         if self._client.parser.args.dryrun:
             return True
         try:
-            # 'pypump=self.pump' is needed for now,
-            # see https://github.com/xray7224/PyPump/issues/37
-            return self.pump.Person(webfinger, pypump=self.pump).follow()
+            self.pump.Person(webfinger).follow()
+            return True
         except:
             return False
 
@@ -101,7 +89,8 @@ class Account(object):
         if self._client.parser.args.dryrun:
             return True
         try:
-            return self.pump.Person(webfinger, pypump=self.pump).unfollow()
+            self.pump.Person(webfinger).unfollow()
+            return True
         except:
             return False
 

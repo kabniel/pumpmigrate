@@ -50,9 +50,7 @@ Backup of contacts are stored in `~/.cache/pumpmigrate/<webfinger>_followings_<t
 ## Dependencies
 
 * Python (tested with 2.7)
-* PyPump 0.1.5a+ <https://github.com/xray7224/PyPump>
-* requests-oauthlib 0.3.0+
-* requests 1.2.0+
+* PyPump 0.4 <https://github.com/xray7224/PyPump>
 
 ## Contact info
 
