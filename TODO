@@ -1,7 +1,6 @@
 Possible future stuff
 ================
 Post "Moved to $new account" note from old account
-Import contacts from file
 README that doesnt suck
 Sync more than two accounts
 Subcommand 'auth' to authorize pumpmigrate with account, store credentials and exit

@@ -8,13 +8,16 @@ Git repo:	<https://git.gitorious.org/pumpmigrate/pumpmigrate.git>
 
 ## Usage
 
-PumpMigrate has two subcommands, `move` and `sync`
+PumpMigrate has three subcommands, `move`, `sync` and `load`
 
 To move contacts between two accounts, run:
 	pumpmigrate.py move
 
 To sync contacts for two accounts, run:
 	pumpmigrate.py sync
+
+To load contacts from file, run:
+	pumpmigrate.py load my_contacts.json
 
 When an account is first used with PumpMigrate,
 it will ask you for permission to use that account.
@@ -42,6 +45,11 @@ user@pump1 is following foo and user@pump2 is following bar.
 	pumpmigrate.py sync -a user@pump1 user@pump2
 user@pump1 and user@pump2 are now both following foo and bar.
 
+### Load contacts
+	pumpmigrate.py load -a user@pump my_contacts.json
+File contents should be in the format of:
+	["user@pump1", "anotheruser@pump2"]
+
 ## Files
 
 Account credentials are stored in `~/.config/pumpmigrate/accounts.json`
@@ -50,7 +58,7 @@ Backup of contacts are stored in `~/.cache/pumpmigrate/<webfinger>_followings_<t
 ## Dependencies
 
 * Python (tested with 2.7)
-* PyPump 0.4 <https://github.com/xray7224/PyPump>
+* PyPump 0.5 <https://github.com/xray7224/PyPump>
 
 ## Contact info
 

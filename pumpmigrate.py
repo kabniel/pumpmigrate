@@ -22,7 +22,7 @@ from parser import Parser
 
 class App():
     name = 'pumpmigrate'
-    version = '0.2.0'
+    version = '0.3.0'
 
     def __init__(self):
         self.cfgFile = os.path.join(os.environ['HOME'],'.config', self.name,'accounts.json')
@@ -97,6 +97,21 @@ class App():
 
         first.follow_many(andor_wf - first_wf)
         second.follow_many(andor_wf - second_wf)
+
+    def load(self, *args, **kwargs):
+        alias = 'first'
+        webfinger = self.parser.args.webfinger or None
+
+        fn = self.parser.args.filename or None
+        with open(fn, 'r') as f:
+            webfingers_list = json.loads(f.read())
+            f.close()
+
+        self.accounts[alias] = Account(webfinger, alias=alias, app=self)
+        acct = self.accounts[alias]
+
+        acct.follow_many(webfingers_list)
+        
 
     def run(self):
         self.parser.args.func(self.parser.args)

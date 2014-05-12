@@ -65,6 +65,30 @@ class Parser():
                                  dest='dryrun', help='Do not actually follow/unfollow any contacts')
         sync.set_defaults(func=obj.sync)
 
+        loadDesc = dedent('''\
+                          Follow contacts from file, file contents should be
+                            in the format of ["foo@bar", "foz@baz"]
+
+                          example:
+                            pumpmigrate.py load my_contacts.json
+                           ''')
+        load = subparsers.add_parser('load', help='Follow contacts from file',
+                                     formatter_class=argparse.RawDescriptionHelpFormatter,
+                                     description=loadDesc)
+        load.add_argument('-a', '--account', metavar='webfinger', dest='webfinger',
+                          help='The account to load contacts into')
+        load.add_argument('--quiet', action='store_true', dest='quiet',
+                          help='Do not print any output')
+        load.add_argument('--continue', action='store_true', dest='noprompt',
+                          help='Do not prompt before actions, just continue')
+        load.add_argument('--dry-run', action='store_true',
+                                 dest='dryrun', help='Do not actually follow/unfollow any contacts')
+        load.add_argument('filename', metavar='FILE',
+                          help='Path to file with list of contacts')
+
+        load.set_defaults(func=obj.load)
+
+
         if len(sys.argv) < 2:
             # show help if no args
             self.args = self.parser.parse_args(['--help'])

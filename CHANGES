@@ -1,3 +1,8 @@
+0.3.0
+=====
+Now depends on PyPump 0.5
+Only send activities to users affected by it (no more spamming meanwhile feeds)
+subcommand "load" to follow contacts from file
 0.2.0
 =====
 Now using PyPump's functions to get list of followers instead of doing the requests ourselves.
