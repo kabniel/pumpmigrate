@@ -47,6 +47,7 @@ class Account(object):
 
         self.pump = PyPump(
             client=client,
+            verifier_callback=self.verifier,
             token=self.cfg.get('token'),
             secret=self.cfg.get('token_secret')
         )
@@ -58,6 +59,11 @@ class Account(object):
         self.get_following()
         self.backup_following()
         self._app.say('%s: account ready (following %s contacts)\n----' % (self.webfinger, len(self.following)))
+
+    def verifier(self, url):
+        print("Please open and follow the instructions:")
+        print(url)
+        return raw_input("Verifier: ").strip()
 
     def prompt_enter(self, msg):
         if self._app.parser.args.quiet and self._app.parser.args.noprompt:
