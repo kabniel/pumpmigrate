@@ -90,58 +90,79 @@ class Account(object):
 
     def get_following(self):
         self.app.say("%s: getting contacts (this may take a while)" % self.webfinger)
-        self.following = []
+        self.following = list(self.pump.me.following)
 
-        for i in self.pump.me.following:
-            self.following.append(i.webfinger)
-
-    def follow(self, webfinger):
+    def follow_webfinger(self, webfinger):
         if self.app.parser.args.dryrun:
             return True
+
         try:
-            self.pump.Person(webfinger).follow()
+            obj = {
+                "id":"acct:%s" % webfinger,
+                "objectType":"person",
+            }
+            activity = {
+                "verb":"follow",
+                "object":obj,
+                "to":[obj],
+            }
+
+            self.pump.me._post_activity(activity, unserialize=False)
+
             return True
         except:
             return False
 
-    def unfollow(self, webfinger):
+    def unfollow_webfinger(self, webfinger):
         if self.app.parser.args.dryrun:
             return True
         try:
-            self.pump.Person(webfinger).unfollow()
+            obj = {
+                "id":"acct:%s" % webfinger,
+                "objectType":"person",
+            }
+
+            activity = {
+                "verb":"stop-following",
+                "object":obj,
+                "to":[obj],
+            }
+            
+            self.pump.me._post_activity(activity, unserialize=False)
+
             return True
         except:
             return False
 
-    def follow_many(self, contacts):
-        self.prompt_enter("%s: will now follow %s new contacts" % (self.webfinger, len(contacts)))
+    def follow_many(self, webfingers):
+        self.prompt_enter("%s: will now follow %s new contacts" % (self.webfinger, len(webfingers)))
 
-        for contact in contacts:
+        for webfinger in webfingers:
             # we dont want to follow ourselves
-            if contact == self.webfinger:
-                self.app.say(" Skipped: %s (your account)" % contact)
+            if webfinger == self.webfinger:
+                self.app.say(" Skipped: %s (your account)" % webfinger)
             # skip people we are already following
-            elif contact in self.following:
-                self.app.say(" Skipped: %s (already following)" % contact)
-            elif self.follow(contact):
-                self.app.say(" Followed: %s" % contact)
+            elif webfinger in [i.webfinger for i in self.following]:
+                self.app.say(" Skipped: %s (already following)" % webfinger)
+            elif self.follow_webfinger(webfinger):
+                self.app.say(" Followed: %s" % webfinger)
             else:
-                self.app.say(" Failed: %s" % contact)
+                self.app.say(" Failed: %s" % webfinger)
 
         self.get_following()
         self.app.say("%s: now following %s contacts\n----" % (self.webfinger, len(self.following)))
 
-    def unfollow_many(self, contacts):
-        self.prompt_enter("%s: will now unfollow %s contacts" % (self.webfinger, len(contacts)))
+    def unfollow_many(self, webfingers):
+        self.prompt_enter("%s: will now unfollow %s contacts" % (self.webfinger, len(webfingers)))
 
-        for contact in contacts:
+        for webfinger in webfingers:
             # skip contacts we are not following
-            if contact not in self.following:
-                self.app.say(" Skipped %s (not following)" % contact)
-            elif self.unfollow(contact):
-                self.app.say(" Unfollowed: %s" % contact)
+            if webfinger not in [i.webfinger for i in self.following]:
+                self.app.say(" Skipped %s (not following)" % webfinger)
+            elif self.unfollow_webfinger(webfinger):
+                self.app.say(" Unfollowed: %s" % webfinger)
             else:
-                self.app.say(" Failed: %s" % contact)
+                self.app.say(" Failed: %s" % webfinger)
 
         self.get_following()
         self.app.say("%s: now following %s contacts\n----" % (self.webfinger, len(self.following)))

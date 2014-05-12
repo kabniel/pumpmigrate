@@ -60,7 +60,7 @@ class App():
         if not os.path.exists(os.path.dirname(backupFile)):
             os.makedirs(os.path.dirname(backupFile))
         with open(backupFile, 'w') as f:
-            f.write(json.dumps(acct.following))
+            f.write(json.dumps([p.webfinger for p in acct.following]))
             f.close()
 
     def move(self, *args, **kwargs):
@@ -70,25 +70,33 @@ class App():
             self.accounts[alias] = Account(webfinger, alias=alias, app=self)
         old = self.accounts['old']
         new = self.accounts['new']
-        # follow contacts from old account
+        # make new follow contacts from old account
         if not self.parser.args.nofollow:
-            new.follow_many(old.following)
+            old_wf = set([o.webfinger for o in old.following])
+            new.follow_many(old_wf)
 
-        # unfollow contacts if they are in both old and new
+        # make old unfollow contacts if they are in both old and new
         if not self.parser.args.nounfollow:
-            inboth = set(old.following) & set(new.following)
-            old.unfollow_many(inboth)
+            old_wf = set([o.webfinger for o in old.following])
+            new_wf = set([n.webfinger for n in new.following])
+            inboth_wf = old_wf & new_wf
+
+            old.unfollow_many(inboth_wf)
 
     def sync(self, *args, **kwargs):
         aliases = ['first', 'second']
         webfingers = self.parser.args.webfingers or [None, None]
         for alias, webfinger in zip(aliases, webfingers):
             self.accounts[alias] = Account(webfinger, alias=alias, app=self)
+
         first = self.accounts['first']
         second = self.accounts['second']
-        andor = set(first.following) | set(second.following)
-        first.follow_many(andor - set(first.following))
-        second.follow_many(andor - set(second.following))
+        first_wf = set([f.webfinger for f in first.following])
+        second_wf = set([s.webfinger for s in second.following])
+        andor_wf = first_wf | second_wf
+
+        first.follow_many(andor_wf - first_wf)
+        second.follow_many(andor_wf - second_wf)
 
     def run(self):
         self.parser.args.func(self.parser.args)
