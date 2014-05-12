@@ -20,7 +20,7 @@ from datetime import datetime
 from account import Account
 from parser import Parser
 
-class Client():
+class App():
     name = 'pumpmigrate'
     version = '0.2.0'
 
@@ -67,7 +67,7 @@ class Client():
         aliases = ['old', 'new']
         webfingers = self.parser.args.webfingers or [None, None]
         for alias, webfinger in zip(aliases, webfingers):
-            self.accounts[alias] = Account(webfinger, alias=alias, client=self)
+            self.accounts[alias] = Account(webfinger, alias=alias, app=self)
         old = self.accounts['old']
         new = self.accounts['new']
         # follow contacts from old account
@@ -83,7 +83,7 @@ class Client():
         aliases = ['first', 'second']
         webfingers = self.parser.args.webfingers or [None, None]
         for alias, webfinger in zip(aliases, webfingers):
-            self.accounts[alias] = Account(webfinger, alias=alias, client=self)
+            self.accounts[alias] = Account(webfinger, alias=alias, app=self)
         first = self.accounts['first']
         second = self.accounts['second']
         andor = set(first.following) | set(second.following)
@@ -94,5 +94,5 @@ class Client():
         self.parser.args.func(self.parser.args)
 
 if __name__ == '__main__':
-    app = Client()
+    app = App()
     app.run()
