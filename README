@@ -45,7 +45,7 @@ user@pump1 is following foo and user@pump2 is following bar.
 	pumpmigrate.py sync -a user@pump1 user@pump2
 user@pump1 and user@pump2 are now both following foo and bar.
 
-### Load contacts
+#### Load contacts
 	pumpmigrate.py load -a user@pump my_contacts.json
 File contents should be in the format of:
 	["user@pump1", "anotheruser@pump2"]

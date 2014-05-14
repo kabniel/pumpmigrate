@@ -15,7 +15,7 @@
 ##
 
 
-import json, os
+import json, os, sys
 from datetime import datetime
 from account import Account
 from parser import Parser
@@ -102,10 +102,16 @@ class App():
         alias = 'first'
         webfinger = self.parser.args.webfinger or None
 
-        fn = self.parser.args.filename or None
-        with open(fn, 'r') as f:
-            webfingers_list = json.loads(f.read())
-            f.close()
+        fn = self.parser.args.filename
+        try:
+            with open(fn, 'r') as f:
+                webfingers_list = json.loads(f.read())
+                f.close()
+        except IOError:
+            sys.exit("Error: could not open file: %s" % fn)
+        except ValueError:
+            sys.exit("Error: could not parse file: %s\n  correct format is: [\"foo@bar\", \"foz@baz\"]" % fn)
+            
 
         self.accounts[alias] = Account(webfinger, alias=alias, app=self)
         acct = self.accounts[alias]
